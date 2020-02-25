@@ -1,6 +1,6 @@
 # Deep Spread for Records
 
-ECMAScript proposal for deep spread for Records.
+ECMAScript proposal for deep spread for [Records](https://github.com/tc39/proposal-record-tuple).
 
 **Author:**
 
@@ -19,15 +19,13 @@ ECMAScript proposal for deep spread for Records.
 
 # Overview
 
-Currently, only spread syntax can be used to manipulate records, via creating a new record
-with the same properties as the old record, overwriting with the properties specified in the new record literal.
+Because [`Record`s](https://github.com/tc39/proposal-record-tuple) are deeply immutable data structures, the only way to "manipulate" them is to create a new `Record` with the same properties as the old record with spread syntax (or `Record.assign`).
 
-If deep path updates are required (updating a value nested deeply inside a record), then the syntax is
-cumbersome, because a spread is needed at each level of nesting. As a way to solve this problem, a deep path
-spread syntax can be introduced for records, which allows the user to "copy" records and update deeply nested
+If deep path updates are required (updating a value nested deeply inside a `Record`), then the syntax is
+cumbersome, because a spread is needed at each level of nesting. Deep path spread syntax for `Record`s is a possible solution to this problem, which allows the user to "copy" `Record`s and update deeply nested
 properties within them without cumbersome syntax.
 
-These examples demonstrate a possible syntax for deep spreads on records.
+These examples demonstrate a possible syntax for deep spreads on `Record`s.
 
 ```js
 const one = #{
@@ -102,6 +100,6 @@ const one = { a: 1 };
 
 const two = { b.c: 2, ...one };
 
-// Does this fail, or create a record that looks like:
+// Does this fail, or create a Record that looks like:
 // #{ a: 1, b: { c: 2 } }
 ```
