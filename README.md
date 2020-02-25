@@ -1,4 +1,4 @@
-# RefMap
+# Deep Spread for Records
 
 ECMAScript proposal for deep spread for Records.
 
