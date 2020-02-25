@@ -8,8 +8,8 @@ ECMAScript proposal for deep spread for Records.
 
 **Champions:**
 
-- Robin Ricard (Bloomberg)
 - Richard Button (Bloomberg)
+- Robin Ricard (Bloomberg)
 
 **Advisors:**
 
