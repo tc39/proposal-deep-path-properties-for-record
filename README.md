@@ -19,13 +19,13 @@ ECMAScript proposal for deep spread for [Records](https://github.com/tc39/propos
 
 # Overview
 
-Because [`Record`s](https://github.com/tc39/proposal-record-tuple) are deeply immutable data structures, the only way to "manipulate" them is to create a new `Record` with the same properties as the old record with spread syntax (or `Record.assign`).
+Because [`Records`](https://github.com/tc39/proposal-record-tuple) are deeply immutable data structures, the only way to "manipulate" them is to create a new `Record` with the same properties as the old record with spread syntax (or `Record.assign`).
 
 If deep path updates are required (updating a value nested deeply inside a `Record`), then the syntax is
-cumbersome, because a spread is needed at each level of nesting. Deep path spread syntax for `Record`s is a possible solution to this problem, which allows the user to "copy" `Record`s and update deeply nested
-properties within them without cumbersome syntax.
+cumbersome, because a spread is needed at each level of nesting. Deep path spread syntax for `Record` is a possible solution to this problem, which allows the user to "copy" a `Record` and update deeply nested
+properties within it without cumbersome syntax.
 
-These examples demonstrate a possible syntax for deep spreads on `Record`s.
+These examples demonstrate a possible syntax for deep spreads on `Records`.
 
 ```js
 const one = #{
