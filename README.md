@@ -91,7 +91,7 @@ const three = #{
 };
 ```
 
-Question! What happens if the deep path does not exist in the value that is spread?
+### Question! What happens if the deep path does not exist in the value that is spread?
 
 Example:
 
