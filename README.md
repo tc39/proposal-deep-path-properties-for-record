@@ -30,8 +30,8 @@ These examples demonstrate a possible syntax for deep spreads on `Records`.
 ```js
 const one = #{
     a: 1,
-    b: {
-        c: {
+    b: #{
+        c: #{
             d: 2,
             e: 3,
         }
@@ -52,7 +52,7 @@ Traversal through tuples:
 const one = #{
     a: 1,
     b: #{
-        c: #[2, 3, 4, [5, 6]]
+        c: #[2, 3, 4, #[5, 6]]
     },
 }
 const two = #{
@@ -60,21 +60,21 @@ const two = #{
     ...one,
 };
 
-console.log(two.b.c); // #[2, 3, 4, [5, 7]]
+console.log(two.b.c); // #[2, 3, 4, #[5, 7]]
 ```
 
 Computed properties:
 
 ```js
 const one = #{
-    a: {
-        b: {
-            c: {
+    a: #{
+        b: #{
+            c: #{
                 foo: "bar",
             }
         }
     },
-    d: {
+    d: #{
         bill: "ted",
     },
 };
@@ -96,10 +96,10 @@ const three = #{
 Example:
 
 ```js
-const one = { a: 1 };
+const one = #{ a: 1 };
 
-const two = { b.c: 2, ...one };
+const two = #{ b.c: 2, ...one };
 
 // Does this fail, or create a Record that looks like:
-// #{ a: 1, b: { c: 2 } }
+// #{ a: 1, b: #{ c: 2 } }
 ```
