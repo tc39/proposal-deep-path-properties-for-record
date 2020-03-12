@@ -1,6 +1,6 @@
-# Deep Spread for Records
+# Deep Path Properties in Record Literals
 
-ECMAScript proposal for deep spread for [Records](https://github.com/tc39/proposal-record-tuple).
+ECMAScript proposal for deep paths properties for [Record literals](https://github.com/tc39/proposal-record-tuple).
 
 **Author:**
 
@@ -19,13 +19,33 @@ ECMAScript proposal for deep spread for [Records](https://github.com/tc39/propos
 
 # Overview
 
-Because [`Records`](https://github.com/tc39/proposal-record-tuple) are deeply immutable data structures, the only way to "manipulate" them is to create a new `Record` with the same properties as the old record with spread syntax (or `Record.assign`).
+[Record literals](https://github.com/tc39/proposal-record-tuple) sometimes include deeply nested structures, but the syntax for describing them (either as a fresh value, or based on a previous value via spread syntax) can be cumbersome and/or verbose. Deep path properties for `Record` literals provides a solution to this problem, by introducing a new syntax for describing deeply nested structures in a more succient and readable way.
 
-If deep path updates are required (updating a value nested deeply inside a `Record`), then the syntax is
-cumbersome, because a spread is needed at each level of nesting. Deep path spread syntax for `Record` is a possible solution to this problem, which allows the user to "copy" a `Record` and update deeply nested
-properties within it without cumbersome syntax.
+## Examples
 
-These examples demonstrate a possible syntax for deep spreads on `Records`.
+These examples demonstrate a possible syntax for deep path properties for `Record` literals.
+
+```js
+const rec = #{ a.b.c: 123 };
+assert(rec === #{ a: #{ b: #{ c: 123 }}});
+```
+
+### Computed Deep Path Property Keys
+
+```js
+const rec = #{ ["a"]["b"]["c"]: 123 }
+assert(rec === #{ a: #{ b: #{ c: 123 }}});
+```
+
+It is possible to mix dot syntax with computed keys.
+
+```js
+const b = "b";
+const rec = #{ ["a"][b].c: 123 }
+assert(rec === #{ a: #{ b: #{ c: 123 }}});
+```
+
+### Combining Deep Path Properties with Spread
 
 ```js
 const one = #{
@@ -42,11 +62,11 @@ const two = #{
     ...one,
 };
 
-console.log(one.b.c.d); // 2
-console.log(two.b.c.d); // 4
+assert(one.b.c.d === 2);
+assert(two.b.c.d === 4);
 ```
 
-Traversal through tuples:
+It is possible to traverse through `Tuples`.
 
 ```js
 const one = #{
@@ -60,46 +80,43 @@ const two = #{
     ...one,
 };
 
-console.log(two.b.c); // #[2, 3, 4, #[5, 7]]
+assert(two.b.c === #[2, 3, 4, #[5, 7]]);
 ```
 
-Computed properties:
+# FAQ
+
+#### Does deep path properties syntax support objects?
+
+No, the semantics for deep path propertiess for objects are much more unclear than they are for `Record`, where (because `Records` are immutable) the semantics are much simpler.
+
+
+#### What happens if the deep path property does not exist in the value that is spread?
+
+When deep path property syntax is used with spread syntax, there can be ambiguities in what kind of value to "materialize" if the value doesn't already exist. For example:
 
 ```js
-const one = #{
-    a: #{
-        b: #{
-            c: #{
-                foo: "bar",
-            }
-        }
-    },
-    d: #{
-        bill: "ted",
-    },
-};
+const one = #{ a: #{} };
 
-const two = #{
-    ["a"]["b"]["c"]["foo"]: "baz",
-    ...one,
-};
-
-// can be mixed
-const three = #{
-    ["a"].b["c"].foo: "baz",
-    ...one,
-};
+const two = #{ a.b[0]: 123, ...one };
 ```
 
-### Question! What happens if the deep path does not exist in the value that is spread?
-
-Example:
+Both of the following expansions seem like valid answers:
 
 ```js
-const one = #{ a: 1 };
+#{ a: #{ b: #[123] } }
 
-const two = #{ b.c: 2, ...one };
-
-// Does this fail, or create a Record that looks like:
-// #{ a: 1, b: #{ c: 2 } }
+#{ a: #{ b: #{ 0: 123 } } }
 ```
+
+Because of this ambiguity, attempting to use a number-like key in a deep path property where the path doesn't already exist (via a fresh value, or from the spread value), a `TypeError` should be thrown.
+
+#### What happens if a deep path property attempts to set a non-number-like key on a Tuple
+
+`Tuples` cannot have non-number-like keys, as they are immutable ordered lists of values and do not have the concept of a "property" (just like a `number` doesn't have properties). If you attempt to create a `Record` literal with deep path property syntax that would create a `Tuple` with a non-number-like key, a `TypeError` is thrown. For example:
+
+```js
+const one = #{ a: #[1,2,3] };
+const two = #{ ...rec, a.foo: 4 }; // TypeError
+```
+
+See [issue #4](https://github.com/rickbutton/proposal-record-deep-spread/issues/4) for more discussion.
