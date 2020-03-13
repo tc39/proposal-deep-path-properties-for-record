@@ -108,7 +108,7 @@ Both of the following expansions seem like valid answers:
 #{ a: #{ b: #{ 0: 123 } } }
 ```
 
-Because of this ambiguity, attempting to use a number-like key in a deep path property where the path doesn't already exist (via a fresh value, or from the spread value), a `TypeError` should be thrown.
+Because of this ambiguity, attempting to use a deep path property where the path doesn't already exist in the spread value, or where there an ambiguity in what to create (like the number-like key example above), a `TypeError` should be thrown.
 
 #### What happens if a deep path property attempts to set a non-number-like key on a Tuple
 
