@@ -97,10 +97,12 @@ A TypeError is thrown. For example:
 ```js
 const one = #{ a: #{} };
 
-#{ a.b.c: "foo", ...one }; // throws TypeError
+#{ ...one, a.b.c: "foo" }; // throws TypeError
+
+#{ ...one, a.b[0]: "foo" }; // also throws TypeError
 ```
 
-When deep path property syntax is used with spread syntax, there can be ambiguities in what kind of value to "materialize" if the value doesn't already exist. In the previous example, both of the following expansions seem like valid answers:
+One might expect that a record or tuple somehow "materializes" in these cases, to fill in the path. However, when deep path property syntax is used with spread syntax, there can be ambiguities in what kind of value to "materialize" if the value doesn't already exist. In the latter example, both of the following expansions seem like valid answers:
 
 ```js
 #{ a: #{ b: #[123] } }
@@ -108,7 +110,7 @@ When deep path property syntax is used with spread syntax, there can be ambiguit
 #{ a: #{ b: #{ 0: 123 } } }
 ```
 
-Because of this ambiguity, attempting to use a deep path property where the path doesn't already exist in the spread value, or where there an ambiguity in what to create (like the number-like key example above), a `TypeError` should be thrown.
+To keep things simple and minimal, attempting to use a deep path property where the path doesn't already exist in the spread value (whether there is this kind of ambiguity or not) throws a `TypeError`.
 
 #### What happens if a deep path property attempts to set a non-number-like key on a Tuple
 
