@@ -92,15 +92,15 @@ No, the semantics for deep path propertiess for objects are much more unclear th
 
 #### What happens if the deep path property does not exist in the value that is spread?
 
-When deep path property syntax is used with spread syntax, there can be ambiguities in what kind of value to "materialize" if the value doesn't already exist. For example:
+A TypeError is thrown. For example:
 
 ```js
 const one = #{ a: #{} };
 
-const two = #{ a.b[0]: 123, ...one };
+#{ a.b.c: "foo", ...one }; // throws TypeError
 ```
 
-Both of the following expansions seem like valid answers:
+When deep path property syntax is used with spread syntax, there can be ambiguities in what kind of value to "materialize" if the value doesn't already exist. In the previous example, both of the following expansions seem like valid answers:
 
 ```js
 #{ a: #{ b: #[123] } }
@@ -112,11 +112,14 @@ Because of this ambiguity, attempting to use a deep path property where the path
 
 #### What happens if a deep path property attempts to set a non-number-like key on a Tuple
 
-`Tuples` cannot have non-number-like keys, as they are immutable ordered lists of values and do not have the concept of a "property" (just like a `number` doesn't have properties). If you attempt to create a `Record` literal with deep path property syntax that would create a `Tuple` with a non-number-like key, a `TypeError` is thrown. For example:
+A TypeError is thrown. For example:
 
 ```js
 const one = #{ a: #[1,2,3] };
-const two = #{ ...rec, a.foo: 4 }; // TypeError
+
+#{ ...one, a.foo: 4 }; // throws TypeError
 ```
+
+`Tuples` cannot have non-number-like keys, as they are immutable ordered lists of values and do not have the concept of a "property" (just like a `number` doesn't have properties). If you attempt to create a `Record` literal with deep path property syntax that would create a `Tuple` with a non-number-like key, a `TypeError` is thrown.
 
 See [issue #4](https://github.com/rickbutton/proposal-record-deep-spread/issues/4) for more discussion.
