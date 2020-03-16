@@ -26,6 +26,76 @@ ECMAScript proposal for deep paths properties for [Record literals](https://gith
 These examples demonstrate a possible syntax for deep path properties for `Record` literals.
 
 ```js
+const state1 = #{
+    counters: #[
+        #{ name: "Counter 1", value: 1 },
+        #{ name: "Counter 2", value: 0 },
+        #{ name: "Counter 3", value: 123 },
+    ],
+    metadata: #{
+        lastUpdate: 1584382969000,
+    }
+};
+
+const state2 = #{
+    ...state1,
+    counters[0].value: 2,
+    counters[1].value: 1,
+    metadata.lastUpdate: 1584383011300,
+};
+```
+
+In the previous example, two counters are incremented, and the "lastUpdate" time is updated in the new record `state2`.
+
+Without deep path properties, `state2` can be created in a few different ways:
+
+```js
+// With records/tuples and recursive usage of spread syntax
+const state2 = #{
+    ...state1,
+    counters: #[
+        #{
+            ...state1.counters[0],
+            value: 2,
+        },
+        #{
+            ...state1.counters[1],
+            value: 1,
+        },
+        ...state1.counters,
+    ],
+    metadata: #{
+        ...state1.metadata,
+        lastUpdate: 1584383011300,
+    },
+}
+
+// With Immer (and regular objects)
+const state2 = Immer.produce(state1, draft => {
+    draft.counters[0].value = 2;
+    draft.counters[1].value = 1;
+    draft.metadata.lastUpdate = 1584383011300;
+});
+
+// With Immutable.js (and regular objects)
+const immutableState = Immutable.fromJS(state1);
+const state2 = immutableState.merge({
+    counters: immutableState.get("counters").zipWith(
+        (a, b) => a.merge(b),
+        [
+            { value: 2 },
+   	        { value: 1 },
+            {},
+        ]),
+    metadata: {
+  	    lastUpdate: 1584383011300,
+    },
+});
+```
+
+### A Simple Example
+
+```js
 const rec = #{ a.b.c: 123 };
 assert(rec === #{ a: #{ b: #{ c: 123 }}});
 ```
