@@ -43,6 +43,13 @@ const state2 = #{
     counters[1].value: 1,
     metadata.lastUpdate: 1584383011300,
 };
+
+assert(state2.counters[0].value === 2);
+assert(state2.counters[1].value === 1);
+assert(state2.metadata.lastUpdate === 1584383011300);
+
+// As expected, the unmodified values from "spreading" state1 remain in state2.
+assert(state2.counters[2].value === 123);
 ```
 
 In the previous example, two counters are incremented, and the "lastUpdate" time is updated in the new record `state2`.
