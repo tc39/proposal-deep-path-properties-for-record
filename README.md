@@ -4,11 +4,11 @@ ECMAScript proposal for deep paths properties for [Record literals](https://gith
 
 **Author:**
 
-- Richard Button (Bloomberg)
+- Rick Button (Bloomberg)
 
 **Champions:**
 
-- Richard Button (Bloomberg)
+- Rick Button (Bloomberg)
 - Robin Ricard (Bloomberg)
 
 **Advisors:**
