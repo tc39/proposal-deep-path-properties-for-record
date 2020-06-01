@@ -87,9 +87,9 @@ const state2 = Immer.produce(state1, draft => {
 // With Immutable.js (and regular objects)
 const immutableState = Immutable.fromJS(state1);
 const state2 = immutableState
-    .setIn(['counters', 0, 'value'], 2)
-    .setIn(['counters', 1, 'value'], 1)
-    .setIn(['metadata', 'lastUpdate'], 1584383011300);
+    .setIn(["counters", 0, "value"], 2)
+    .setIn(["counters", 1, "value"], 1)
+    .setIn(["metadata", "lastUpdate"], 1584383011300);
 ```
 
 ### A Simple Example
@@ -156,12 +156,12 @@ assert(two.b.c === #[2, 3, 4, #[5, 7]]);
 
 #### Does deep path properties syntax support objects?
 
-No, the semantics for deep path propertiess for objects are much more unclear than they are for `Record`, where (because `Records` are immutable) the semantics are much simpler.
+No, the semantics for deep path properties for objects are much less clear than they are for `Record`, where (because `Records` are immutable) the semantics are much simpler.
 
 
 #### What happens if the deep path property does not exist in the value that is spread?
 
-A TypeError is thrown. For example:
+A `TypeError` is thrown. For example:
 
 ```js
 const one = #{ a: #{} };
@@ -183,7 +183,7 @@ To keep things simple and minimal, attempting to use a deep path property where 
 
 #### What happens if a deep path property attempts to set a non-number-like key on a Tuple
 
-A TypeError is thrown. For example:
+A `TypeError` is thrown. For example:
 
 ```js
 const one = #{ a: #[1,2,3] };
