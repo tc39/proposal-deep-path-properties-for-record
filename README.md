@@ -19,7 +19,7 @@ ECMAScript proposal for deep paths properties for [Record literals](https://gith
 
 # Overview
 
-[Record literals](https://github.com/tc39/proposal-record-tuple) sometimes include deeply nested structures, but the syntax for describing them (either as a fresh value, or based on a previous value via spread syntax) can be cumbersome and/or verbose. Deep path properties for `Record` literals provides a solution to this problem, by introducing a new syntax for describing deeply nested structures in a more succient and readable way.
+[Record literals](https://github.com/tc39/proposal-record-tuple) sometimes include deeply nested structures, but the syntax for describing them (either as a fresh value, or based on a previous value via spread syntax) can be cumbersome and/or verbose. Deep path properties for `Record` literals provides a solution to this problem, by introducing a new syntax for describing deeply nested structures in a more succinct and readable way.
 
 ## Examples
 
@@ -34,7 +34,7 @@ const state1 = #{
     ],
     metadata: #{
         lastUpdate: 1584382969000,
-    }
+    },
 };
 
 const state2 = #{
@@ -86,18 +86,10 @@ const state2 = Immer.produce(state1, draft => {
 
 // With Immutable.js (and regular objects)
 const immutableState = Immutable.fromJS(state1);
-const state2 = immutableState.merge({
-    counters: immutableState.get("counters").zipWith(
-        (a, b) => a.merge(b),
-        [
-            { value: 2 },
-   	        { value: 1 },
-            {},
-        ]),
-    metadata: {
-  	    lastUpdate: 1584383011300,
-    },
-});
+const state2 = immutableState
+    .setIn(['counters', 0, 'value'], 2)
+    .setIn(['counters', 1, 'value'], 1)
+    .setIn(['metadata', 'lastUpdate'], 1584383011300);
 ```
 
 ### A Simple Example
