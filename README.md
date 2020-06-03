@@ -15,7 +15,7 @@ ECMAScript proposal for deep paths properties for [Record literals](https://gith
 
 - Dan Ehrenberg (Igalia)
 
-**Stage:** 0
+**Stage:** 1, Reached at June 2020 TC39
 
 # Overview
 
